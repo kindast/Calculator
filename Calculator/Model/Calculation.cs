@@ -36,10 +36,13 @@ namespace Calculator.Model
                 AddPoint(ref number);
             else if (value == "+/-")
                 InverseNumber(ref number);
-            else if (value == "%" && operation != string.Empty && rightValue != string.Empty)
+            else if (value == "%")
             {
-                rightValue = (double.Parse(rightValue) * double.Parse(leftValue) / 100).ToString();
-                resultText = rightValue;
+                if (operation != string.Empty && rightValue != string.Empty)
+                {
+                    rightValue = (double.Parse(rightValue) * double.Parse(leftValue) / 100).ToString();
+                    resultText = rightValue;
+                }
             }
             else
             {
