@@ -1,4 +1,6 @@
-﻿namespace Calculator.Model
+﻿using System.Text;
+
+namespace Calculator.Model
 {
     public class Calculation
     {
@@ -13,101 +15,40 @@
 
         public void UpdateText(string value)
         {
+            ref string number = ref leftValue;
+            if (operation == string.Empty)
+                number = ref leftValue;
+            else
+                number = ref rightValue;
+
             if (char.IsDigit(value[0]))
-            {
-                if (operation == string.Empty)
-                    UpdateNumber(ref leftValue, value);
-                else
-                    UpdateNumber(ref rightValue, value);
-            }
+                UpdateNumber(ref number, value);
             else if (value == "C")
-            {
                 ClearValues();
-            }
             else if (value == "=" && leftValue != "")
             {
                 Calculate();
-                rightValue = "";
                 operation = "";
             }
             else if (value == "D")
-            {
-                if (operation == string.Empty)
-                {
-                    string temp = "";
-                    for (int i = 0; i < leftValue.Length - 1; i++)
-                        temp += leftValue[i];
-                    leftValue = temp;
-                    if (leftValue == string.Empty)
-                        leftValue = "0";
-                    resultText = leftValue;
-                }
-                else
-                {
-                    string temp = "";
-                    for (int i = 0; i < rightValue.Length - 1; i++)
-                        temp += rightValue[i];
-                    rightValue = temp;
-                    if (rightValue == string.Empty)
-                        rightValue = "0";
-                    resultText = rightValue;
-                }
-            }
+                DeleteLastChar(ref number);
             else if (value == ",")
-            {
-                if (operation != "")
-                {
-                    if (rightValue.Contains(","))
-                        return;
-                    rightValue += ",";
-                    resultText = rightValue;
-                }
-                else
-                {
-                    if (leftValue.Contains(","))
-                        return;
-                    leftValue += ",";
-                    resultText = leftValue;
-                }
-            }
+                AddPoint(ref number);
             else if (value == "+/-")
+                InverseNumber(ref number);
+            else if (value == "%" && operation != string.Empty && rightValue != string.Empty)
             {
-                if (operation == string.Empty)
-                {
-                    leftValue = (double.Parse(leftValue) - double.Parse(leftValue) * 2).ToString();
-                    resultText = leftValue;
-                }
-                else
-                {
-                    rightValue = (double.Parse(rightValue) - double.Parse(rightValue) * 2).ToString();
-                    resultText = rightValue;
-                }
-            }
-            else if (value == "%")
-            {
-                if (operation != string.Empty && rightValue != string.Empty)
-                {
-                    rightValue = (double.Parse(rightValue) * double.Parse(leftValue) / 100).ToString();
-                    resultText = rightValue;
-                }
+                rightValue = (double.Parse(rightValue) * double.Parse(leftValue) / 100).ToString();
+                resultText = rightValue;
             }
             else
             {
-                if (rightValue == "")
-                {
-                    operation = value;
-                    calculationText = leftValue + " " + operation;
-                    resultText = "0";
-                    return;
-                }
-                if (operation != "")
-                {
+                if (operation != string.Empty)
                     Calculate();
-                    rightValue = "";
-                }
                 operation = value;
+                rightValue = "0";
                 calculationText = leftValue + " " + operation;
-                resultText = "0";
+                resultText = rightValue;
             }
         }
 
@@ -149,6 +90,7 @@
             calculationText = leftValue + " " + operation + " " + rightValue + " =";
             resultText = result.ToString();
             leftValue = resultText;
+            rightValue = string.Empty;
         }
 
         private void ClearValues()
@@ -165,6 +107,33 @@
             number += value;
             if (!number.Contains(","))
                 number = double.Parse(number).ToString();
+            resultText = number;
+        }
+
+        private void DeleteLastChar(ref string number)
+        {
+            StringBuilder temp = new StringBuilder();
+            for (int i = 0; i < number.Length - 1; i++)
+                temp.Append(number[i]);
+            number = temp.ToString();
+
+            if (number == string.Empty)
+                number = "0";
+
+            resultText = number;
+        }
+
+        private void AddPoint(ref string number)
+        {
+            if (number.Contains(","))
+                return;
+            number += ",";
+            resultText = number;
+        }
+
+        private void InverseNumber(ref string number)
+        {
+            number = (double.Parse(number) - double.Parse(number) * 2).ToString();
             resultText = number;
         }
     }
