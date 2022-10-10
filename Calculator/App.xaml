@@ -9,6 +9,7 @@
             <Setter Property="HorizontalAlignment" Value="Right"/>
         </Style>
         <Style TargetType="{x:Type Button}">
+            <Setter Property="Command" Value="{Binding UpdateCommand}"/>
             <Setter Property="FontSize" Value="18"/>
             <Setter Property="FontFamily" Value="Arial"/>
             <Setter Property="Margin" Value="-0.4"/>

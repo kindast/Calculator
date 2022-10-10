@@ -64,6 +64,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Model\Calculation.cs" />
+    <Compile Include="ViewModel\ApplicationViewModel.cs" />
     <Compile Include="View\WndStart.xaml.cs">
       <DependentUpon>WndStart.xaml</DependentUpon>
       <SubType>Code</SubType>
@@ -95,8 +96,6 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="ViewModel\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
